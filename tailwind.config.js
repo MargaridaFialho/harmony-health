@@ -15,6 +15,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            backgroundImage: {
+                'hero-pattern': "url('/resources/images/RegisteredNurse.png')",
+              },
         },
     },
 

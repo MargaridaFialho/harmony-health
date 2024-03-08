@@ -8,6 +8,8 @@ import { Link } from '@inertiajs/react';
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
+    const isAdmin = user.roles.some(role => role.name === 'administrator');
+    
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
@@ -24,6 +26,11 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
+                                {isAdmin && (
+                                    <NavLink href={route('admin.users.manage')} active={route().current('admin.users.manage')}>
+                                        Manage Users
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
