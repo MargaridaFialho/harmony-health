@@ -8,7 +8,7 @@ import { Link } from '@inertiajs/react';
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
-    const isAdmin = user.roles.some(role => role.name === 'administrator');
+    const isAdmin = user?.roles?.some(role => role.name === 'administrator') || false;
     
     return (
         <div className="min-h-screen bg-gray-100">

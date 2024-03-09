@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -40,11 +39,37 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
+    /**
+     * The roles that belong to the user.
+     */
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Determine if the user has a specific role.
+     *
+     * @param string $roleName
+     * @return bool
+     */
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    /**
+     * The appointments that belong to the user.
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'patient_user_id');
+    }
+
+    public function doctorProfile()
+    {
+        return $this->hasOne(Doctor::class);
     }
 }

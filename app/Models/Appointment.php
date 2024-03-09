@@ -10,12 +10,33 @@ class Appointment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_id', 'patient_id', 'appointment_number', 'date_time', 'status'
+        'doctor_user_id', 'patient_user_id', 'appointment_number', 'date_time', 'status'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($appointment) {
+            // Generate a unique appointment number
+            $appointment->appointment_number = Appointment::generateUniqueAppointmentNumber();
+        });
+    }
+
+    public static function generateUniqueAppointmentNumber()
+    {
+        do {
+            $number = random_int(100000, 999999); // Example generation logic
+        } while (Appointment::where('appointment_number', $number)->exists());
+
+        return $number;
+    }
 
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class);
+        return $this->belongsTo(User::class, 'user_id')->whereHas('roles', function ($query) {
+            $query->where('name', 'doctor');
+        });
     }
 
     public function patient()

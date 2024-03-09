@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\AppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'canRegister' => Route::has('register')
     ]);
 });
 
@@ -35,6 +34,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Appointment routes
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::get('/appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
+    Route::patch('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
+    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -44,5 +51,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/admin/users/{user}/update-role', [UserManagementController::class, 'updateRole'])->name('admin.users.updateRole');
+Route::post('/admin/assign-doctor', [UserManagementController::class, 'assignRoleAsDoctor'])->name('admin.assign.doctor');
 
 require __DIR__.'/auth.php';

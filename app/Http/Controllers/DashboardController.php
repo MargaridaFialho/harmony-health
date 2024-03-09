@@ -11,12 +11,22 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $user->load('roles'); // Assuming you have the roles relationship set up
+        $user->load('roles'); // Load roles if you're using a roles relationship
 
-        // You can add more logic here to customize the data based on the user's role
+        // Example logic for a patient
+        if ($user->hasRole('patient')) { // Assuming you have a method to check user roles
+            $appointments = $user->appointments()->with('doctor')->get();
 
+            return Inertia::render('Dashboard/PatientDashboard', [
+                'appointments' => $appointments,
+            ]);
+        }
+
+        // Add more conditions here for other roles, e.g., doctor or admin
+
+        // Default return for users without specific roles or additional data
         return Inertia::render('Dashboard', [
-            'user' => $user->load('roles'),
+            'user' => $user,
         ]);
     }
 }

@@ -18,7 +18,7 @@ class DoctorAvailabilityController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'doctor_id' => 'required|exists:doctors,id',
+            'doctor_user_id' => 'required|exists:doctors,id',
             'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -48,7 +48,7 @@ class DoctorAvailabilityController extends Controller
         }
 
         $validatedData = $request->validate([
-            'doctor_id' => 'required|exists:doctors,id',
+            'doctor_user_id' => 'required|exists:doctors,id',
             'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',

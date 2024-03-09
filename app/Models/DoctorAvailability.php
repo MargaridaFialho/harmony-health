@@ -10,7 +10,7 @@ class DoctorAvailability extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_id', 'day_of_week', 'start_time', 'end_time', 'status'
+        'doctor_user_id', 'day_of_week', 'start_time', 'end_time', 'status'
     ];
 
     public function doctor()

@@ -14,6 +14,7 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Role;
+use App\Models\Patient;
 
 class RegisteredUserController extends Controller
 {
@@ -46,9 +47,15 @@ class RegisteredUserController extends Controller
 
         // Assuming you have a 'patient' role in your roles table
         $patientRole = Role::where('name', 'patient')->first();
-        
+
         // Attach the 'patient' role to the newly created user
         $user->roles()->attach($patientRole->id);
+
+        // Create a patient profile for the newly created user
+        Patient::create([
+            'user_id' => $user->id,
+            // Add any other default fields for the patient profile here
+        ]);
 
         event(new Registered($user));
 

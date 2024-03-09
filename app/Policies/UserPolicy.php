@@ -4,9 +4,12 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
@@ -28,7 +31,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $this->isAdministrator($user);
     }
 
     /**
@@ -36,7 +39,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        //
+        return $this->isAdministrator($user);
     }
 
     /**
@@ -66,4 +69,19 @@ class UserPolicy
     {
         return $user->roles->contains('name', 'administrator');
     }
+    public function isAdministrator(User $user): bool
+    {
+        return $user->role === 'administrator';
+    }
+
+    public function isDoctor(User $user): bool
+    {
+        return $user->role === 'doctor';
+    }
+
+    public function isPatient(User $user): bool
+    {
+        return $user->role === 'patient';
+    }
 }
+

@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
-            $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
+            $table->foreignId('doctor_user_id')->constrained('doctors')->onDelete('cascade');
+            $table->foreignId('patient_user_id')->constrained('patients')->onDelete('cascade');
             $table->integer('appointment_number');
             $table->dateTime('date_time');
             $table->enum('status', ['scheduled', 'completed', 'cancelled']);
             $table->timestamps();
-            $table->unique(['doctor_id', 'appointment_number'], 'doctor_appointment_number_unique');
+            $table->unique(['doctor_user_id', 'appointment_number'], 'doctor_appointment_number_unique');
         });
     }
 
