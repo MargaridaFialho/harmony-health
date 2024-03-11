@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { usePage, Head } from '@inertiajs/react';
 import AppointmentCalendar from '../../Components/AppointmentCalendar';
 import PastAppointmentsList from '../../Components/PastAppointmentsList';
-import PrimaryButton from '../../Components/PrimaryButton';
 
 
 const PatientDashboard = ({ auth }) => {
-    const { appointments } = usePage().props;
+    const { appointments, userRole } = usePage().props;
     const [futureAppointments, setFutureAppointments] = useState([]);
     const [pastAppointments, setPastAppointments] = useState([]);
 
@@ -19,9 +18,9 @@ const PatientDashboard = ({ auth }) => {
 
     return (
         <AuthenticatedLayout
-        user={auth.user}
-        header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Olá, {auth.user.name}!</h2>}
-    >
+            user={auth.user}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Olá, {auth.user.name}!</h2>}
+        >
         <Head title="Patient Dashboard" />
 
         <div className="py-12">
@@ -34,7 +33,7 @@ const PatientDashboard = ({ auth }) => {
                             <div className="bg-white shadow rounded-lg p-4">
                                 <h2 className="text-xl font-semibold text-gray-800">As suas próximas consultas</h2>
                                 {futureAppointments.length > 0 ? (
-                                    <AppointmentCalendar appointments={futureAppointments} />
+                                    <AppointmentCalendar appointments={futureAppointments} userRole={userRole} />
                                 ) : (
                                     <p>Não tem consultas futuras.</p>
                                 )}

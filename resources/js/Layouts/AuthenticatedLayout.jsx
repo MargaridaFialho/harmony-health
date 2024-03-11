@@ -9,6 +9,8 @@ export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     const isAdmin = user?.roles?.some(role => role.name === 'administrator') || false;
+    const isDoctor = user?.roles?.some(role => role.name === 'doctor') || false;
+    const isPatient = user?.roles?.some(role => role.name === 'patient') || false;
     
     return (
         <div className="min-h-screen bg-gray-100">
@@ -22,20 +24,38 @@ export default function Authenticated({ user, header, children }) {
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
                                 {isAdmin && (
-                                    <NavLink href={route('admin.users.manage')} active={route().current('admin.users.manage')}>
-                                        Manage Users
-                                    </NavLink>
+                                    <>
+                                        <NavLink href={route('admin.users.manage')} active={route().current('admin.users.manage')}>
+                                            Manage Users
+                                        </NavLink>
+                                        <NavLink href="#">
+                                            Drugs
+                                        </NavLink>
+                                    </>
+                                )}
+                                {isDoctor && (
+                                    <>
+                                        <NavLink href="#">
+                                            Prescriptions
+                                        </NavLink>
+                                        <NavLink href="#">
+                                            Patients
+                                        </NavLink>
+                                        <NavLink href="#">
+                                            Drugs
+                                        </NavLink>
+                                    </>
                                 )}
                             </div>
                         </div>
 
-                        <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="ms-3 relative">
+                        <div className="hidden sm:flex sm:items-center sm:ml-6">
+                            <div className="ml-3 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -46,7 +66,7 @@ export default function Authenticated({ user, header, children }) {
                                                 {user.name}
 
                                                 <svg
-                                                    className="ms-2 -me-0.5 h-4 w-4"
+                                                    className="ml-2 -mr-0.5 h-4 w-4"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"
                                                     fill="currentColor"
@@ -69,30 +89,6 @@ export default function Authenticated({ user, header, children }) {
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
-                                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
-                            >
-                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path
-                                        className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\AppointmentController;
 
 
 /*
@@ -21,3 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/doctors', [DoctorController::class, 'index']);
+
+Route::post('/appointments/{appointment}/confirm', [AppointmentController::class, 'confirmAppointment']);
+Route::post('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancelAppointment']);

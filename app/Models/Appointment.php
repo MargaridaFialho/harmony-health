@@ -34,14 +34,12 @@ class Appointment extends Model
 
     public function doctor()
     {
-        return $this->belongsTo(User::class, 'user_id')->whereHas('roles', function ($query) {
-            $query->where('name', 'doctor');
-        });
+        return $this->belongsTo(User::class, 'doctor_user_id');
     }
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(User::class, 'patient_user_id');
     }
 
     public function drugs()

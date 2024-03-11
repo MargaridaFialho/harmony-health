@@ -141,4 +141,22 @@ class AppointmentController extends Controller
         $appointment->delete();
         return redirect()->route('appointments.index')->with('success', 'Appointment deleted successfully.');
     }
+
+    public function confirmAppointment($appointmentId)
+    {
+        $appointment = Appointment::find($appointmentId);
+        $appointment->status = 'scheduled';
+        $appointment->save();
+
+        return response()->json(['message' => 'Appointment confirmed']);
+    }
+
+    public function cancelAppointment($appointmentId)
+    {
+        $appointment = Appointment::find($appointmentId);
+        $appointment->status = 'canceled';
+        $appointment->save();
+
+        return response()->json(['message' => 'Appointment canceled']);
+    }
 }
