@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Doctor;
 use App\Models\Patient;
+use App\Models\Drug;
 use Inertia\Inertia;
 use Exception;
 
@@ -97,5 +98,19 @@ class UserManagementController extends Controller
                 // Add any additional default values or logic for new patient profiles here
             }
         });
+    }
+
+    public function manageDrugs()
+    {
+        return Inertia::render('Admin/Drugs');
+    }
+
+    public function viewDrugs()
+    {
+        $drugs = Drug::all(); // Assuming you have a Drug model to fetch drugs from the database
+
+        return Inertia::render('Admin/Drugs', [
+            'drugs' => $drugs
+        ]);
     }
 }

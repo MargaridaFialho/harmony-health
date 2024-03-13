@@ -53,4 +53,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::post('/admin/users/{user}/update-role', [UserManagementController::class, 'updateRole'])->name('admin.users.updateRole');
 Route::post('/admin/assign-doctor', [UserManagementController::class, 'assignRoleAsDoctor'])->name('admin.assign.doctor');
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/users', [UserManagementController::class, 'index'])
+        ->middleware('can:manageUsers,App\Models\User')
+        ->name('admin.users.manage');
+
+    // Existing route for managing drugs, accessible only to those who can manage drugs
+    Route::get('/admin/drugs', [UserManagementController::class, 'manageDrugs'])
+        ->middleware('can:manage-drugs')
+        ->name('admin.drugs.manage');
+
+    // New route for viewing drugs, accessible to all authenticated users (including doctors)
+    Route::get('/drugs', [UserManagementController::class, 'viewDrugs'])
+        ->name('drugs.view');
+});
+
 require __DIR__.'/auth.php';

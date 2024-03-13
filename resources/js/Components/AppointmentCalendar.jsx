@@ -16,22 +16,24 @@ const AppointmentCalendar = ({ appointments, userRole }) => {
     if (!isOpen) return null;
   
     return (
-      <div className="modal-backdrop">
-        <div className="modal-content">
-          <h2>Appointment Details</h2>
-          <ul>
+      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="my-modal">
+        <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <h2 className="text-center text-lg font-semibold">Detalhes da Marcação</h2>
+          <ul className="my-4">
             {appointments.map((appointment, index) => (
-              <li key={index}>
+              <li key={index} className="mb-2">
                 {/* Conditional rendering based on userRole */}
                 {userRole === 'patient' ? (
-                  <>Appointment with Doctor {appointment.doctor ? appointment.doctor.name : 'Unknown '} </>
+                  <span>Consulta com {appointment.doctor ? appointment.doctor.name : 'Desconhecido '} </span>
                 ) : (
-                  <>Appointment with Patient {appointment.patient_name ? appointment.patient_name : 'Unknown '} </>
-                )} on {new Date(appointment.date_time).toLocaleString()} - Status: {appointment.status}
+                  <span>Consulta com {appointment.patient_name ? appointment.patient_name : 'Desconhecido '} </span>
+                )} em {new Date(appointment.date_time).toLocaleString()} - Status: {appointment.status}
               </li>
             ))}
           </ul>
-          <button onClick={onClose}>Close</button>
+          <div className="text-center">
+            <button onClick={onClose} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition ease-in-out duration-150">Fechar</button>
+          </div>
         </div>
       </div>
     );

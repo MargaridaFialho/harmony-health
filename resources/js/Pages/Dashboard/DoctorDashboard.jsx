@@ -10,7 +10,7 @@ const DoctorDashboard = () => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Welcome, Dr. {auth.user.name}!</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Olá, Dr. {auth.user.name}!</h2>}
         >
             <Head title="Doctor Dashboard" />
             <div className="py-12">
@@ -19,11 +19,11 @@ const DoctorDashboard = () => {
                         <div className="p-6 text-gray-900">
                             <AppointmentCalendar appointments={confirmedAppointments} userRole={userRole} />
                             <div className="mt-4">
-                                <h2 className="text-xl font-semibold text-gray-800">Pending Confirmations</h2>
+                                <h2 className="text-xl font-semibold text-gray-800">Confirmações Pendentes</h2>
                                 {pendingAppointments.length > 0 ? (
                                     <PendingAppointmentsList appointments={pendingAppointments} />
                                 ) : (
-                                    <p>No appointments to approve.</p>
+                                    <p>Não existem marcações para aprovar.</p>
                                 )}
                             </div>
                         </div>

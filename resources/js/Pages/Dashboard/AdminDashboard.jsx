@@ -1,8 +1,8 @@
 function AdminDashboard() {
     return (
         <div>
-            <h1>Admin Dashboard</h1>
-            <p>Welcome to your dashboard, Administrator!</p>
+            <h1>Dashboard do Administrador</h1>
+            <p>Bem-vindo, Administrador!</p>
         </div>
     );
 }

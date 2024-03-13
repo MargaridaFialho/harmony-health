@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useForm } from '@inertiajs/react';
+import { Link, useForm, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const ScheduleAppointment = ({ auth }) => {
@@ -43,7 +43,7 @@ const ScheduleAppointment = ({ auth }) => {
           onSuccess: (page) => {
               if (page.props.success) {
                   // Handle success
-                  Inertia.visit('/dashboard'); // Redirect to the dashboard
+                  router.visit('/dashboard'); // Redirect to the dashboard
               }
           },
       });
@@ -52,28 +52,34 @@ const ScheduleAppointment = ({ auth }) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Schedule an Appointment</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Marcar uma consulta</h2>}
         >
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                    <label htmlFor="doctor_user_id">Médico:</label>
-                    <select name="doctor_user_id" onChange={handleChange} value={data.doctor_user_id} required>
-                        <option value="">Escolha um médico</option>
-                        {doctors.map(doctor => (
-                            <option key={doctor.user_id} value={doctor.user_id}>{doctor.name}</option>
-                        ))}
-                    </select>
+            <div className="py-12">
+               <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="pt-6 pb-6 pl-6 pr-6 bg-white border-b border-gray-200">
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                            <label htmlFor="doctor_user_id">Médico:</label>
+                            <select name="doctor_user_id" onChange={handleChange} value={data.doctor_user_id} required className="mt-1 block w-full">
+                                <option value="">Escolha um médico</option>
+                                {doctors.map(doctor => (
+                                    <option key={doctor.user_id} value={doctor.user_id}>{doctor.name}</option>
+                                ))}
+                            </select>
+                            </div>
+                            <div className="mt-4">
+                                <label htmlFor="date_time">Data e Hora:</label>
+                                <input type="datetime-local" name="date_time" onChange={handleChange} value={data.date_time} required className="mt-1 block w-full" />
+                            </div>
+                            <button type="submit" className="mt-4 inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-700 border border-transparent rounded-md font-semibold text-white">Marcar</button>
+                        </form>
+                        {isLoading && <p>Loading doctors...</p>}
+                        {error && <p>Error fetching doctors: {error}</p>}
+                        <Link href="/dashboard" className="mt-4 inline-block text-blue-500 hover:text-blue-700">Voltar</Link>
                     </div>
-                    <div>
-                        <label htmlFor="date_time">Date and Time:</label>
-                        <input type="datetime-local" name="date_time" onChange={handleChange} value={data.date_time} required />
-                    </div>
-                    <button type="submit">Schedule</button>
-                </form>
-                {isLoading && <p>Loading doctors...</p>}
-                {error && <p>Error fetching doctors: {error}</p>}
-                <Link href="/dashboard">Back to Dashboard</Link>
+                </div>
+            </div> 
             </div>
         </AuthenticatedLayout>
     );

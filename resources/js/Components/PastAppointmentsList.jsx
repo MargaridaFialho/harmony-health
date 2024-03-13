@@ -5,7 +5,7 @@ const PastAppointmentsList = ({ appointments }) => {
       <ul className="mt-2">
         {appointments.map(appointment => (
           <li key={appointment.id} className="mt-1">
-            {appointment.date_time} with {appointment.doctor?.name || 'Unknown Doctor'}
+            {appointment.date_time} com {appointment.doctor?.name || 'Doutor Desconhecido'}
           </li>
         ))}
       </ul>

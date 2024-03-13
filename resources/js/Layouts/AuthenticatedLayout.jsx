@@ -10,7 +10,6 @@ export default function Authenticated({ user, header, children }) {
 
     const isAdmin = user?.roles?.some(role => role.name === 'administrator') || false;
     const isDoctor = user?.roles?.some(role => role.name === 'doctor') || false;
-    const isPatient = user?.roles?.some(role => role.name === 'patient') || false;
     
     return (
         <div className="min-h-screen bg-gray-100">
@@ -26,15 +25,15 @@ export default function Authenticated({ user, header, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
+                                    Início
                                 </NavLink>
                                 {isAdmin && (
                                     <>
                                         <NavLink href={route('admin.users.manage')} active={route().current('admin.users.manage')}>
-                                            Manage Users
+                                            Gerir Utilizadores
                                         </NavLink>
-                                        <NavLink href="#">
-                                            Drugs
+                                        <NavLink href={route('admin.drugs.manage')} active={route().current('admin.drugs.manage')}>
+                                            Gerir Fármacos
                                         </NavLink>
                                     </>
                                 )}
@@ -46,8 +45,8 @@ export default function Authenticated({ user, header, children }) {
                                         <NavLink href="#">
                                             Patients
                                         </NavLink>
-                                        <NavLink href="#">
-                                            Drugs
+                                        <NavLink href={route('drugs.view')} active={route().current('drugs.view')}>
+                                            Fármacos
                                         </NavLink>
                                     </>
                                 )}

@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react'; // Import Inertia
 
 export default function ManageUsers({ auth, errors, users, roles }) {
-
     const [selectedRoles, setSelectedRoles] = useState(() => {
         const initialRoles = {};
         users.forEach(user => {
@@ -26,7 +25,7 @@ export default function ManageUsers({ auth, errors, users, roles }) {
         <AuthenticatedLayout
             user={auth.user}
             errors={errors}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Manage Users</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Gerir Utilizadores</h2>}
         >
             <Head title="Manage Users" />
             <div className="py-12">
@@ -36,11 +35,11 @@ export default function ManageUsers({ auth, errors, users, roles }) {
                             <table className="table-auto w-full">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
+                                        <th>Nome</th>
                                         <th>Email</th>
-                                        <th>Current Role</th>
-                                        <th>New Role</th>
-                                        <th>Actions</th>
+                                        <th>Papel</th>
+                                        <th>Novo Papel</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,7 +63,7 @@ export default function ManageUsers({ auth, errors, users, roles }) {
                                                     onClick={() => saveRoleChanges(user.id)}
                                                     className="px-4 py-2 bg-blue-500 text-white rounded"
                                                 >
-                                                    Save Changes
+                                                    Guardar
                                                 </button>
                                             </td>
                                         </tr>
