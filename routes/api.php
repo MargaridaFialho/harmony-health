@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DrugController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\Api\PatientsController;
 
 
 /*
@@ -31,3 +33,7 @@ Route::get('/drugs', [DrugController::class, 'index']); // View all drugs
 Route::post('/drugs', [DrugController::class, 'store']); // Add a new drug
 Route::patch('/drugs/{drug}', [DrugController::class, 'update']); // Update an existing drug
 Route::delete('/drugs/{drug}', [DrugController::class, 'destroy']); // Delete a drug
+
+Route::get('/patients', [PatientController::class, 'index']);
+Route::get('/patients/{id}', [PatientsController::class, 'show']);
+Route::get('/patients/{id}/appointments', [PatientsController::class, 'appointments']);

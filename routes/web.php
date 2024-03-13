@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Admin\UserManagementController;
-use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\{
+    DashboardController,
+    ProfileController,
+    AppointmentController,
+    Admin\UserManagementController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -19,53 +20,51 @@ use App\Http\Controllers\AppointmentController;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register')
-    ]);
-});
+Route::get('/', fn() => Inertia::render('Welcome', [
+    'canLogin' => Route::has('login'),
+    'canRegister' => Route::has('register')
+]));
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+    // Profile routes
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile', 'edit')->name('profile.edit');
+        Route::patch('/profile', 'update')->name('profile.update');
+        Route::delete('/profile', 'destroy')->name('profile.destroy');
+    });
+
     // Appointment routes
-    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
-    Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
-    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-    Route::get('/appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
-    Route::patch('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
-    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
-});
+    Route::controller(AppointmentController::class)->prefix('appointments')->name('appointments.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{appointment}', 'show')->name('show');
+        Route::patch('/{appointment}', 'update')->name('update');
+        Route::delete('/{appointment}', 'destroy')->name('destroy');
+    });
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/admin/users', [UserManagementController::class, 'index'])
-     ->middleware('can:manageUsers,App\Models\User')
-     ->name('admin.users.manage');
-});
+    // Admin routes
+    Route::middleware('can:manageUsers,App\Models\User')->group(function () {
+        Route::get('/admin/users', [UserManagementController::class, 'index'])->name('admin.users.manage');
+        Route::post('/admin/users/{user}/update-role', [UserManagementController::class, 'updateRole'])->name('admin.users.updateRole');
+        Route::post('/admin/assign-doctor', [UserManagementController::class, 'assignRoleAsDoctor'])->name('admin.assign.doctor');
 
-Route::post('/admin/users/{user}/update-role', [UserManagementController::class, 'updateRole'])->name('admin.users.updateRole');
-Route::post('/admin/assign-doctor', [UserManagementController::class, 'assignRoleAsDoctor'])->name('admin.assign.doctor');
+        // Managing drugs
+        Route::get('/admin/drugs', [UserManagementController::class, 'manageDrugs'])->middleware('can:manage-drugs')->name('admin.drugs.manage');
+    });
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/admin/users', [UserManagementController::class, 'index'])
-        ->middleware('can:manageUsers,App\Models\User')
-        ->name('admin.users.manage');
+    // Viewing drugs, accessible to all authenticated users (including doctors)
+    Route::get('/drugs', [UserManagementController::class, 'viewDrugs'])->name('drugs.view');
 
-    // Existing route for managing drugs, accessible only to those who can manage drugs
-    Route::get('/admin/drugs', [UserManagementController::class, 'manageDrugs'])
-        ->middleware('can:manage-drugs')
-        ->name('admin.drugs.manage');
+    Route::get('/patients', function () {
+        return Inertia::render('PatientPage');
+    })->name('patients.index');
 
-    // New route for viewing drugs, accessible to all authenticated users (including doctors)
-    Route::get('/drugs', [UserManagementController::class, 'viewDrugs'])
-        ->name('drugs.view');
+    Route::get('/patients/{id}', function ($id) {
+        return Inertia::render('PatientDetailsPage', ['id' => $id]);
+    })->name('patients.details')->middleware('auth');
 });
 
 require __DIR__.'/auth.php';

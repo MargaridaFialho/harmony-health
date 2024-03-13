@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
     // Display a listing of patients
-    public function index()
+    public function index(Request $request)
     {
-        $patients = Patient::all();
+        $patients = User::whereHas('roles', function ($query) {
+            $query->where('name', 'patient');
+        })->get(['id', 'name']); // Adjust the selected fields as necessary
+
         return response()->json($patients);
     }
 
@@ -29,7 +33,7 @@ class PatientController extends Controller
     // Display the specified patient
     public function show($id)
     {
-        $patient = Patient::find($id);
+        $patient = Patient::with('appointments')->find($id); // Assuming a patient has many appointments
         if (!$patient) {
             return response()->json(['message' => 'Patient not found'], 404);
         }

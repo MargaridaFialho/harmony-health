@@ -42,8 +42,8 @@ export default function Authenticated({ user, header, children }) {
                                         <NavLink href="#">
                                             Prescriptions
                                         </NavLink>
-                                        <NavLink href="#">
-                                            Patients
+                                        <NavLink href={route('patients.index')} active={route().current('patients.index')}>
+                                            Pacientes
                                         </NavLink>
                                         <NavLink href={route('drugs.view')} active={route().current('drugs.view')}>
                                             Fármacos
