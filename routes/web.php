@@ -6,7 +6,8 @@ use App\Http\Controllers\{
     DashboardController,
     ProfileController,
     AppointmentController,
-    Admin\UserManagementController
+    Admin\UserManagementController,
+    PrescriptionController
 };
 
 /*
@@ -65,6 +66,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/patients/{id}', function ($id) {
         return Inertia::render('PatientDetailsPage', ['id' => $id]);
     })->name('patients.details')->middleware('auth');
+
+    Route::get('/scheduled-appointments', function () {
+        return Inertia::render('ScheduledAppointmentList');
+    })->name('scheduled.appointments');
 });
 
 require __DIR__.'/auth.php';

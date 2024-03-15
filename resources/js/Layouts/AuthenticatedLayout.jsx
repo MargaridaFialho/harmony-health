@@ -39,8 +39,8 @@ export default function Authenticated({ user, header, children }) {
                                 )}
                                 {isDoctor && (
                                     <>
-                                        <NavLink href="#">
-                                            Prescriptions
+                                        <NavLink href={route('scheduled.appointments')} active={route().current('scheduled.appointments')}>
+                                            Consultas
                                         </NavLink>
                                         <NavLink href={route('patients.index')} active={route().current('patients.index')}>
                                             Pacientes

@@ -20,7 +20,7 @@ class AppointmentController extends Controller
     {
         $this->authorize('viewAny', Appointment::class);
         // Logic to retrieve appointments based on user role
-        $query = Appointment::query()->with(['doctor', 'patient']);
+        $query = Appointment::query()->with(['doctor', 'patient', 'prescriptions']);
         if (auth()->user()->role === 'patient') {
             $query->where('patient_user_id', auth()->id());
         }
@@ -158,5 +158,18 @@ class AppointmentController extends Controller
         $appointment->save();
 
         return response()->json(['message' => 'Appointment canceled']);
+    }
+
+    public function complete($id)
+    {
+        $appointment = Appointment::find($id);
+        if (!$appointment) {
+            return response()->json(['message' => 'Appointment not found'], 404);
+        }
+    
+        $appointment->status = 'completed'; // Assuming 'completed' is the status value for a completed appointment
+        $appointment->save();
+    
+        return response()->json(['message' => 'Appointment completed successfully']);
     }
 }

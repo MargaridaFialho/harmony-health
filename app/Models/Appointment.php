@@ -47,4 +47,14 @@ class Appointment extends Model
         return $this->belongsToMany(Drug::class, 'prescriptions')
                     ->withPivot('dosage', 'quantity', 'instructions');
     }
+
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class);
+    }
+    
+    public function scopeScheduled($query)
+    {
+        return $query->where('status', 'scheduled');
+    }
 }

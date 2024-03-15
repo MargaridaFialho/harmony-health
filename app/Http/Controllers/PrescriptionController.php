@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Prescription;
 use Illuminate\Http\Request;
+use App\Models\Appointment;
 
 class PrescriptionController extends Controller
 {
@@ -21,11 +22,19 @@ class PrescriptionController extends Controller
             'appointment_id' => 'required|exists:appointments,id',
             'drug_id' => 'required|exists:drugs,id',
             'dosage' => 'required|string',
-            'quantity' => 'required|integer',
             'instructions' => 'nullable|string',
         ]);
 
-        $prescription = Prescription::create($validatedData);
+        $prescription = Prescription::create([
+            'appointment_id' => $validatedData['appointment_id'],
+            'drug_id' => $validatedData['drug_id'],
+            'dosage' => $validatedData['dosage'],
+            'instructions' => $validatedData['instructions'],
+        ]);
+
+        // Load the drug relationship to include drug details in the response
+        $prescription->load('drug');
+
         return response()->json($prescription, 201);
     }
 
@@ -68,5 +77,18 @@ class PrescriptionController extends Controller
         }
         $prescription->delete();
         return response()->json(['message' => 'Prescription deleted successfully']);
+    }
+
+    public function scheduledAppointments()
+    {
+        $includePrescriptions = request()->query('include') === 'prescriptions';
+    
+        $scheduledAppointments = Appointment::scheduled()->with(['patient', 'doctor']);
+    
+        if ($includePrescriptions) {
+            $scheduledAppointments = $scheduledAppointments->with('prescriptions.drug');
+        }
+    
+        return response()->json($scheduledAppointments->get());
     }
 }

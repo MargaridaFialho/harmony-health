@@ -7,6 +7,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DrugController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\Api\PatientsController;
+use App\Http\Controllers\PrescriptionController;
 
 
 /*
@@ -37,3 +38,8 @@ Route::delete('/drugs/{drug}', [DrugController::class, 'destroy']); // Delete a 
 Route::get('/patients', [PatientController::class, 'index']);
 Route::get('/patients/{id}', [PatientsController::class, 'show']);
 Route::get('/patients/{id}/appointments', [PatientsController::class, 'appointments']);
+
+Route::get('/appointments/scheduled', [PrescriptionController::class, 'scheduledAppointments']);
+Route::post('/prescriptions', [PrescriptionController::class, 'store']);
+
+Route::post('/appointments/{id}/complete', [AppointmentController::class, 'complete']);
