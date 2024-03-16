@@ -20,8 +20,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Inertia::share('auth.userRole', function () {
-            return auth()->user() ? auth()->user()->roles->first()->name : null;
-        });
+        Inertia::share([
+            // Share the entire user object and the user's role with every Inertia response
+            'auth' => function () {
+                $user = auth()->user();
+
+                if ($user) {
+                    // Optionally, you can limit what properties of the user you want to share
+                    // to avoid sending sensitive information (like passwords) to the frontend
+                    return [
+                        'user' => $user->only('id', 'name', 'email'),
+                        'userRole' => $user->roles->first()->name,
+                    ];
+                }
+
+                return [
+                    'user' => null,
+                    'userRole' => null,
+                ];
+            },
+        ]);
     }
 }

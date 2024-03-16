@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useForm, router } from '@inertiajs/react';
+import { Link, useForm, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Modal from '@/Components/Modal';
 
 const ScheduleAppointment = ({ auth }) => {
+
     const { data, setData, post } = useForm({
         doctor_user_id: '',
         date_time: '',
@@ -38,16 +40,21 @@ const ScheduleAppointment = ({ auth }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Submitting form', data);
-        post('/appointments', data, {
-          onSuccess: (page) => {
-              if (page.props.success) {
-                  // Handle success
-                  router.visit('/dashboard'); // Redirect to the dashboard
-              }
-          },
-      });
+        post('/appointments', data);
     };
+
+        const [isModalVisible, setIsModalVisible] = useState(false);
+    const { flash = {} } = usePage().props;
+
+    useEffect(() => {
+    if (flash?.success) {
+        setIsModalVisible(true); // Show the modal when there is a success message
+    }
+}, [flash?.success]);
+
+const handleAccept = () => {
+    setIsModalVisible(false); // Hide the modal
+};
 
     return (
         <AuthenticatedLayout
@@ -81,6 +88,17 @@ const ScheduleAppointment = ({ auth }) => {
                 </div>
             </div> 
             </div>
+            <Modal show={isModalVisible} onClose={handleAccept} maxWidth="md">
+            <div className="p-6">
+                <p>{flash?.success}</p>
+                <button
+                    onClick={handleAccept}
+                    className="mt-4 inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-700 border border-transparent rounded-md font-semibold text-white"
+                >
+                    Accept
+                </button>
+            </div>
+        </Modal>
         </AuthenticatedLayout>
     );
 };

@@ -6,7 +6,6 @@ const DrugForm = ({ drug = {}, onSave }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Saving drug:', { ...drug, name, description }); // Add this line to debug
         onSave({ ...drug, name, description });
     };
 

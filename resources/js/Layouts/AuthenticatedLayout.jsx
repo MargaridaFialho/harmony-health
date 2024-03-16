@@ -10,6 +10,7 @@ export default function Authenticated({ user, header, children }) {
 
     const isAdmin = user?.roles?.some(role => role.name === 'administrator') || false;
     const isDoctor = user?.roles?.some(role => role.name === 'doctor') || false;
+    const isPatient = user?.roles?.some(role => role.name === 'patient') || false;
     
     return (
         <div className="min-h-screen bg-gray-100">
@@ -35,6 +36,9 @@ export default function Authenticated({ user, header, children }) {
                                         <NavLink href={route('admin.drugs.manage')} active={route().current('admin.drugs.manage')}>
                                             Gerir Fármacos
                                         </NavLink>
+                                        <NavLink href={route('appointment.history')} active={route().current('appointment.history')}>
+                                            Histórico
+                                        </NavLink>
                                     </>
                                 )}
                                 {isDoctor && (
@@ -47,6 +51,16 @@ export default function Authenticated({ user, header, children }) {
                                         </NavLink>
                                         <NavLink href={route('drugs.view')} active={route().current('drugs.view')}>
                                             Fármacos
+                                        </NavLink>
+                                        <NavLink href={route('doctor.history')} active={route().current('doctor.history')}>
+                                            Histórico
+                                        </NavLink>
+                                    </>
+                                )}
+                                {isPatient && (
+                                    <>
+                                        <NavLink href={route('patient.history')} active={route().current('patient.history')}>
+                                            Histórico
                                         </NavLink>
                                     </>
                                 )}
@@ -81,9 +95,9 @@ export default function Authenticated({ user, header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        <Dropdown.Link href={route('profile.edit')}>Perfil</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
-                                            Log Out
+                                            Logout
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>

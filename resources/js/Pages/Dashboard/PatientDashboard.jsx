@@ -13,7 +13,9 @@ const PatientDashboard = ({ auth }) => {
     useEffect(() => {
         const now = new Date();
         setFutureAppointments(appointments.filter(appointment => new Date(appointment.date_time) > now));
-        setPastAppointments(appointments.filter(appointment => new Date(appointment.date_time) <= now));
+        setPastAppointments(appointments
+            .filter(appointment => new Date(appointment.date_time) <= now || appointment.status === 'completed')
+            .sort((a, b) => new Date(b.date_time) - new Date(a.date_time)));
     }, [appointments]);
 
     return (

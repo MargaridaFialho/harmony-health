@@ -14,7 +14,6 @@ class DashboardController extends Controller
         $user = Auth::user();
         $user->load('roles');
         $userRole = $user->roles->first()->name;
-        \Log::debug('UserRole:', ['userRole' => $userRole]);
 
         // Logic for a patient
         if ($user->hasRole('patient')) {
@@ -43,6 +42,14 @@ class DashboardController extends Controller
                 'confirmedAppointments' => $confirmedAppointments,
                 'pendingAppointments' => $pendingAppointments,
                 'userRole' => $userRole,
+            ]);
+        }
+
+        // Logic for an admin
+        if ($user->hasRole('administrator')) {
+            // Additional data can be fetched and passed to the admin dashboard as needed
+            return Inertia::render('Dashboard/AdminDashboard', [
+                'auth' => $user, // Passing the authenticated user object under 'auth'
             ]);
         }
 

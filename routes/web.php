@@ -7,7 +7,9 @@ use App\Http\Controllers\{
     ProfileController,
     AppointmentController,
     Admin\UserManagementController,
-    PrescriptionController
+    PrescriptionController,
+    PatientHistoryController,
+    DoctorHistoryController
 };
 
 /*
@@ -70,6 +72,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/scheduled-appointments', function () {
         return Inertia::render('ScheduledAppointmentList');
     })->name('scheduled.appointments');
+
+    Route::get('/patient/history', [PatientHistoryController::class, 'show'])->name('patient.history');
+
+    Route::get('/appointment-history', function () {
+        return Inertia::render('AppointmentHistory');
+    })->name('appointment.history');
 });
+
+Route::middleware(['auth', 'verified', 'doctor'])->get('/doctor/history', [DoctorHistoryController::class, 'show'])->name('doctor.history');
 
 require __DIR__.'/auth.php';

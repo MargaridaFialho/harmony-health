@@ -8,6 +8,7 @@ use App\Http\Controllers\DrugController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\Api\PatientsController;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\PatientHistoryController;
 
 
 /*
@@ -43,3 +44,7 @@ Route::get('/appointments/scheduled', [PrescriptionController::class, 'scheduled
 Route::post('/prescriptions', [PrescriptionController::class, 'store']);
 
 Route::post('/appointments/{id}/complete', [AppointmentController::class, 'complete']);
+
+Route::get('/patient/{id}/appointments', [PatientHistoryController::class, 'getAppointments']);
+
+Route::get('/appointments/all', [AppointmentController::class, 'getAllAppointments']);

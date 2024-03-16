@@ -19,11 +19,14 @@ const PatientDetailsPage = ({ auth }) => {
             })
             .catch(error => console.error('There was a problem with the fetch operation:', error));
 
-        // Fetch patient's appointment history
-        fetch(`/api/patients/${id}/appointments`)
-            .then(response => response.json())
-            .then(data => setAppointments(data))
-            .catch(error => console.error("Failed to fetch appointments:", error));
+        // Fetch patient's appointment history including prescriptions
+        fetch(`/api/patient/${id}/appointments`)
+        .then(response => response.json())
+        .then(data => {
+            const sortedAppointments = data.sort((a, b) => new Date(b.date_time) - new Date(a.date_time));
+            setAppointments(sortedAppointments);
+        })
+        .catch(error => console.error("Failed to fetch appointments:", error));
     }, [id]);
 
     if (!patient) return (
@@ -51,18 +54,28 @@ const PatientDetailsPage = ({ auth }) => {
                         <div className="p-6 bg-white border-b border-gray-200">
                             <h2 className="text-lg leading-6 font-medium text-gray-900">Histórico de Consultas</h2>
                             {appointments.length > 0 ? (
-                                <ul className="divide-y divide-gray-200">
-                                    {appointments.map((appointment) => (
-                                        <li key={appointment.id} className="py-4">
-                                            {/* Adjusted to match the provided object structure */}
-                                            <span className="text-sm font-medium text-gray-500">{appointment.date_time}</span> - 
-                                            <span className="text-sm text-gray-700">{appointment.status}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="text-sm text-gray-500">No appointments found.</p>
-                            )}
+    <ul className="divide-y divide-gray-200">
+        {appointments.map((appointment) => (
+            <li key={appointment.id} className="py-4">
+                <span className="text-sm font-medium text-gray-500">{appointment.date_time}</span> - 
+                <span className="text-sm text-gray-700">{appointment.status}</span>
+                <ul className="mt-2">
+                    {appointment.prescriptions.length > 0 ? (
+                        appointment.prescriptions.map((prescription) => (
+                            <li key={prescription.id} className="text-sm text-gray-500">
+                                Prescrição: {prescription.drug.name} - Dosagem: {prescription.dosage} - Instruções: {prescription.instructions}
+                            </li>
+                        ))
+                    ) : (
+                        <li className="text-sm text-gray-500">Sem prescrições.</li>
+                    )}
+                </ul>
+            </li>
+        ))}
+    </ul>
+) : (
+    <p className="text-sm text-gray-500">Sem consultas disponíveis.</p>
+)}
                         </div>
                     </div>
                 </div>

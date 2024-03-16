@@ -11,6 +11,7 @@ use App\Models\Patient;
 use Illuminate\Support\Facades\Log;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 
 class AppointmentController extends Controller
@@ -51,14 +52,12 @@ class AppointmentController extends Controller
     // Store a newly created appointment in storage
     public function store(Request $request)
     {
-        Log::info('Attempting to create appointment', $request->all());
-
         // Adjusted validation rules
         $validatedData = $request->validate([
-            'doctor_user_id' => [ // Assuming this is the doctor's user ID
+            'doctor_user_id' => [
                 'required',
                 Rule::exists('users', 'id')->where(function ($query) {
-                    $doctorRoleId = Role::where('name', 'doctor')->first()->id; // Adjust based on your role identification
+                    $doctorRoleId = Role::where('name', 'doctor')->first()->id;
                     $query->whereExists(function ($query) use ($doctorRoleId) {
                         $query->select(DB::raw(1))
                               ->from('role_user')
@@ -69,23 +68,16 @@ class AppointmentController extends Controller
             ],
             'date_time' => 'required|date|after:now',
         ]);
-
-        $validatedData['patient_user_id'] = auth()->id(); // Assuming the authenticated user is the patient
+    
+        $validatedData['patient_user_id'] = auth()->id();
         $validatedData['status'] = 'pending confirmation';
-        Log::info('Store appointment request:', $request->all());
+    
         try {
-            $appointment = Appointment::create([
-                'doctor_user_id' => $validatedData['doctor_user_id'], // Use 'doctor_user_id' for the doctor
-                'patient_user_id' => $validatedData['patient_user_id'],
-                'date_time' => $validatedData['date_time'],
-                'status' => $validatedData['status'],
-                // Include other necessary fields
-            ]);
-            Log::info('Appointment created successfully', ['appointment_id' => $appointment->id]);
-            return response()->json(['success' => 'Appointment created successfully.', 'appointment_id' => $appointment->id]);
+            $appointment = Appointment::create($validatedData);
+            return redirect()->route('dashboard')->with('success', 'Appointment created successfully.');
         } catch (\Exception $e) {
-            Log::error('Failed to create appointment', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Failed to create appointment.'], 500);
+            Log::error('Failed to create appointment: '.$e->getMessage());
+            return Redirect::back()->withInput()->withErrors(['error' => 'Failed to create appointment.']);
         }
     }
 
@@ -167,9 +159,17 @@ class AppointmentController extends Controller
             return response()->json(['message' => 'Appointment not found'], 404);
         }
     
-        $appointment->status = 'completed'; // Assuming 'completed' is the status value for a completed appointment
+        $appointment->status = 'completed';
         $appointment->save();
     
         return response()->json(['message' => 'Appointment completed successfully']);
+    }
+
+    public function getAllAppointments()
+    {
+        $appointments = Appointment::with(['patient', 'doctor', 'prescriptions.drug'])
+                                    ->get();
+    
+        return response()->json($appointments);
     }
 }

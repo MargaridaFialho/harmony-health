@@ -11,9 +11,7 @@ class DrugController extends Controller
     // Display a listing of drugs
     public function index()
     {
-        Log::info('Fetching all drugs');
         $drugs = Drug::all();
-        Log::info('Drugs fetched successfully', ['count' => $drugs->count()]);
         return response()->json($drugs);
     }
 

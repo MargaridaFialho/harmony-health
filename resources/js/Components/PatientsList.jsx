@@ -19,7 +19,6 @@ const PatientsList = () => {
     return (
         <div className="flex flex-col">
             {patients.map(patient => (
-                // Use InertiaLink for navigation, passing the patient ID in the URL
                 <Link key={patient.id} href={`/patients/${patient.id}`} className="text-blue-500 hover:text-blue-700 mb-2">
                     {patient.name}
                 </Link>

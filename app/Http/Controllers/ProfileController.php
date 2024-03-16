@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -29,14 +31,31 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $userData = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $doctorData = Arr::only($userData, ['employee_number', 'specialty']);
+        $userData = Arr::except($userData, ['employee_number', 'specialty']);
+    
+        $user->fill($userData);
+    
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
-
-        $request->user()->save();
-
+        
+        $user->save();
+    
+        // Check if the user is a doctor and update or create doctor profile
+        if ($user->hasRole('doctor')) {
+            $doctorProfile = $user->doctorProfile()->first();
+            if ($doctorProfile) {
+                $doctorProfile->update($doctorData);
+            } else {
+                // If no doctor profile exists, create one
+                $user->doctorProfile()->create($doctorData);
+            }
+        }
+    
         return Redirect::route('profile.edit');
     }
 
