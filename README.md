@@ -27,7 +27,7 @@
 
 ## Desenho da base de dados
 
-![This is an alt text.](../harmony-health/public/desenhobasedados.png "Desenho da base de dados")
+![Desenho da base de dados](../harmony-health/public/desenhobasedados.png "Desenho da base de dados")
 
 ## Ferramentas Utilizadas
 
@@ -39,7 +39,7 @@
 
 ## Desenho da API REST
 
-![This is an alt text.](../harmony-health/public/desenhoapi.png "Desenho da API")
+![Desenho da API](../harmony-health/public/desenhoapi.png "Desenho da API")
 
 ## Links
 
@@ -50,10 +50,15 @@
 
 ## Melhorias Futuras
 
-> Inserção no frontend da especialidade; adicionar as disponibilidades do médico; melhoramentos vários de experiência de utilizador.
+> Inserção no frontend da especialidade;
+> Adicionar as disponibilidades do médico (doctor availabilities); ~
+> Melhoramentos vários de experiência de utilizador.
 
 ## Installation e Correr no terminal
 
+> Para correr localmente são necessárias as seguintes dependências na máquina: NodeJS, NPM, PHP, Composer
+> Também é recomendado, para facilidade na interface, possuir o XAMPP instalado (para as bases de dados MySQL).~
+> Para rodar o projeto, é necessário no Terminal:
 ```
 npm install;
 npm run dev;
