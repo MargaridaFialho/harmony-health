@@ -74,10 +74,10 @@ class AppointmentController extends Controller
     
         try {
             $appointment = Appointment::create($validatedData);
-            return redirect()->route('dashboard')->with('success', 'Appointment created successfully.');
+            return redirect()->route('dashboard')->with('success', 'A marcação foi realizada com sucesso.');
         } catch (\Exception $e) {
             Log::error('Failed to create appointment: '.$e->getMessage());
-            return Redirect::back()->withInput()->withErrors(['error' => 'Failed to create appointment.']);
+            return Redirect::back()->withInput()->withErrors(['error' => 'Houve um erro na criação da marcação. Tente novamente.']);
         }
     }
 
@@ -122,7 +122,7 @@ class AppointmentController extends Controller
         ]);
 
         $appointment->update($validatedData);
-        return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully.');
+        return redirect()->route('appointments.index')->with('success', 'A marcação foi atualizada com sucesso.');
     }
 
     // Remove the specified appointment from storage
@@ -131,7 +131,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
         $this->authorize('delete', $appointment);
         $appointment->delete();
-        return redirect()->route('appointments.index')->with('success', 'Appointment deleted successfully.');
+        return redirect()->route('appointments.index')->with('success', 'A marcação foi eliminada com sucesso.');
     }
 
     public function confirmAppointment($appointmentId)
@@ -172,4 +172,18 @@ class AppointmentController extends Controller
     
         return response()->json($appointments);
     }
+
+    public function getPendingAppointments()
+{
+    $doctorId = auth()->id(); // Get the authenticated user's ID
+
+    // Fetch only the pending appointments for the logged-in doctor
+    // and include patient information
+    $pendingAppointments = Appointment::with('patient')
+                                      ->where('status', 'pending confirmation')
+                                      ->where('doctor_user_id', $doctorId)
+                                      ->get();
+
+    return response()->json($pendingAppointments);
+}
 }

@@ -30,7 +30,11 @@ function AppointmentHistory() {
                                         Date: {appointment.date_time}
                                     </div>
                                     <div className="ml-2 flex-shrink-0 flex">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${appointment.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                            appointment.status === 'pending confirmation' ? 'bg-red-100 text-red-800' :
+                                            appointment.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                                            appointment.status === 'canceled' ? 'bg-gray-100 text-gray-800' :
+                                            'bg-green-100 text-green-800'}`}>
                                             {appointment.status}
                                         </span>
                                     </div>

@@ -1,54 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
-const PendingAppointmentsList = ({ appointments }) => {
+const PendingAppointmentsList = ({ initialAppointments }) => {
+    const [appointments, setAppointments] = useState(initialAppointments);
+
+    // Function to fetch updated list of appointments
+    const fetchAppointments = async () => {
+        try {
+            const response = await fetch('/api/appointments/pending', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    // If using a different authentication method, include the necessary header here
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch appointments');
+            }
+            const data = await response.json();
+            setAppointments(data); // Update the appointments state with the fetched data
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('An error occurred while fetching appointments');
+        }
+    };
+
     // Function to handle confirming an appointment
     const handleConfirm = async (appointmentId) => {
-        // Send a request to the backend to update the appointment status to "scheduled"
         try {
             const response = await fetch(`/api/appointments/${appointmentId}/confirm`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Include other necessary headers, such as authorization tokens
                 },
-                // No need to send a body for a status update, but your backend might require something
             });
             if (response.ok) {
-                // Handle successful confirmation, e.g., refresh the list or show a message
-                console.log('Appointment confirmed');
-                window.location.reload(); // Add this line to refresh the page
+                toast.success('Marcarção confirmada!');
+                fetchAppointments(); // Refresh the appointments list
             } else {
-                // Handle errors, e.g., show an error message
-                console.error('Failed to confirm appointment');
+                toast.error('Failed to confirm appointment');
             }
         } catch (error) {
             console.error('Error:', error);
+            toast.error('An error occurred while confirming the appointment');
         }
     };
-    
+
     const handleCancel = async (appointmentId) => {
-        // Similar implementation to handleConfirm, but for canceling appointments
         try {
             const response = await fetch(`/api/appointments/${appointmentId}/cancel`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Include other necessary headers
+                    // Include other necessary headers, such as authorization tokens
                 },
-                // Body if needed
             });
             if (response.ok) {
-                // Handle successful cancellation
-                console.log('Appointment canceled');
+                toast.success('Marcação cancelada!');
+                fetchAppointments(); // Refresh the appointments list
             } else {
-                // Handle errors
-                console.error('Failed to cancel appointment');
+                toast.error('Failed to cancel appointment');
             }
         } catch (error) {
             console.error('Error:', error);
+            toast.error('An error occurred while canceling the appointment');
         }
     };
 
+    // Optionally, you can use useEffect to fetch appointments when the component mounts
+    useEffect(() => {
+        fetchAppointments();
+    }, []);
     
     return (
         <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -61,7 +84,7 @@ const PendingAppointmentsList = ({ appointments }) => {
                                     <p className="text-sm font-medium text-indigo-600 truncate">Date: {appointment.date_time}</p>
                                     <p className="mt-2 flex items-center text-sm text-gray-500">
                                         {/* Display appointment details */}
-                                        Patient: {appointment.patient_name}
+                                        Paciente: {appointment.patient?.name}
                                     </p>
                                 </div>
                                 <div className="mt-4 flex-shrink-0 sm:mt-0 sm:ml-5">

@@ -21,7 +21,7 @@ const DoctorDashboard = () => {
                             <div className="mt-4">
                                 <h2 className="text-xl font-semibold text-gray-800">Confirmações Pendentes</h2>
                                 {pendingAppointments.length > 0 ? (
-                                    <PendingAppointmentsList appointments={pendingAppointments} />
+                                    <PendingAppointmentsList initialAppointments={pendingAppointments} />
                                 ) : (
                                     <p>Não existem marcações para aprovar.</p>
                                 )}

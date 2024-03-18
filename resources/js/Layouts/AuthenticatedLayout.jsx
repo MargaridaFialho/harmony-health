@@ -1,16 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePage, Link } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const { flash } = usePage().props;
 
     const isAdmin = user?.roles?.some(role => role.name === 'administrator') || false;
     const isDoctor = user?.roles?.some(role => role.name === 'doctor') || false;
     const isPatient = user?.roles?.some(role => role.name === 'patient') || false;
+
+    useEffect(() => {
+        if (flash.success) {
+            toast.success(flash.success);
+        }
+        if (flash.error) {
+            toast.error(flash.error);
+        }
+    }, [flash.success, flash.error]);
     
     return (
         <div className="min-h-screen bg-gray-100">
@@ -128,6 +140,8 @@ export default function Authenticated({ user, header, children }) {
                     </div>
                 </div>
             </nav>
+
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
             {header && (
                 <header className="bg-white shadow">
