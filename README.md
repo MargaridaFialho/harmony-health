@@ -58,6 +58,21 @@
 
 > Para correr localmente são necessárias as seguintes dependências na máquina: NodeJS, NPM, PHP, Composer
 > Também é recomendado, para facilidade na interface, possuir o XAMPP instalado (para as bases de dados MySQL).
+> Para aceder ao administrador inserir os seguintes dados no login:
+```
+margaridafialho2012@gmail.com
+12345678
+```
+> Para aceder ao paciente inserir os seguintes dados no login:
+```
+teste2@teste.com
+12345678
+```
+> Para aceder ao médico inserir os seguintes dados no login:
+```
+teste3@teste3.com
+12345678
+```
 > Para rodar o projeto, é necessário no Terminal:
 
 ```
