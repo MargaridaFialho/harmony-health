@@ -27,7 +27,7 @@
 
 ## Desenho da base de dados
 
-![Desenho da base de dados](https://app.gemoo.com/share/image-annotation/628324817033183232?codeId=M07kBqdAW8wBg&origin=imageurlgenerator)
+[Desenho da base de dados](https://app.gemoo.com/share/image-annotation/628324817033183232?codeId=M07kBqdAW8wBg&origin=imageurlgenerator)
 
 ## Ferramentas Utilizadas
 
@@ -39,7 +39,7 @@
 
 ## Desenho da API REST
 
-![Desenho da API](https://app.gemoo.com/share/image-annotation/628325135800258560?codeId=PalVj42VY6qmG&origin=imageurlgenerator)
+[Desenho da API](https://app.gemoo.com/share/image-annotation/628325135800258560?codeId=PalVj42VY6qmG&origin=imageurlgenerator)
 
 ## Links
 
