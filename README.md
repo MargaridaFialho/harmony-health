@@ -27,7 +27,7 @@
 
 ## Desenho da base de dados
 
-![This is an alt text.](/harmony-health/public/desenhobasedados.png "Desenho da base de dados")
+![This is an alt text.](../harmony-health/public/desenhobasedados.png "Desenho da base de dados")
 
 ## Ferramentas Utilizadas
 
@@ -39,7 +39,7 @@
 
 ## Desenho da API REST
 
-![This is an alt text.](/harmony-health/public/desenhoapi.png "Desenho da API")
+![This is an alt text.](../harmony-health/public/desenhoapi.png "Desenho da API")
 
 ## Links
 
